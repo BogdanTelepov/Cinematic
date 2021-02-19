@@ -9,4 +9,7 @@
     <color name="white">#FFFFFFFF</color>
 
     <color name="background_card">#8D86FF</color>
+    <color name="orange">#E48621</color>
+    <color name="text_color">#d1c7c7</color>
+    <color name="yellow">#ECDB1F</color>
 </resources>

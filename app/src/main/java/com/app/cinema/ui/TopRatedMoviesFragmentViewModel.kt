@@ -26,14 +26,112 @@ class TopRatedMoviesFragmentViewModel(
     var topRatedMoviesPage = 1
     var topRatedMoviesResponse: MovieResponse? = null
 
+    val popularMovies: MutableLiveData<Resource<MovieResponse>> = MutableLiveData()
+    var popularMoviesPage = 1
+    var popularMoviesResponse: MovieResponse? = null
+
+    val upcomingMovies: MutableLiveData<Resource<MovieResponse>> = MutableLiveData()
+    var upcomingMoviesPage = 1
+    var upcomingMovieResponse: MovieResponse? = null
+
+
     init {
 
         getTopRatedMovies("ru")
-
+        getPopularMovies("ru")
+        getUpcomingMovies("ru")
     }
 
     fun getTopRatedMovies(language: String) = viewModelScope.launch {
         safeCall(language)
+    }
+
+    fun getPopularMovies(language: String) = viewModelScope.launch {
+        safeCallPopularMovies(language)
+    }
+
+    fun getUpcomingMovies(language: String) = viewModelScope.launch {
+        safeCallUpcomingMovies(language)
+    }
+
+
+
+
+
+    private fun handleUpcomingMoviesResponse(response: Response<MovieResponse>): Resource<MovieResponse> {
+        if (response.isSuccessful) {
+            response.body()?.let {
+                if (upcomingMovieResponse == null) {
+                    upcomingMovieResponse = it
+                } else {
+                    val upcomingMovies = upcomingMovieResponse?.movies
+                    val newMovies = it.movies
+                    upcomingMovies?.addAll(newMovies)
+                }
+
+                return Resource.Success(upcomingMovieResponse ?: it)
+            }
+        }
+
+        return Resource.Error(response.message())
+
+
+    }
+
+    private suspend fun safeCallUpcomingMovies(language: String) {
+        upcomingMovies.postValue(Resource.Loading())
+        try {
+            if (hasInternetConnection()) {
+                val response =
+                    moviesRepository.getUpcomingMovies(language, page = upcomingMoviesPage)
+                upcomingMovies.postValue(handleUpcomingMoviesResponse(response))
+            } else {
+                upcomingMovies.postValue(Resource.Error("No Internet Connection"))
+            }
+        } catch (t: Throwable) {
+            when (t) {
+                is IOException -> upcomingMovies.postValue(Resource.Error("Network Failure"))
+                else -> upcomingMovies.postValue(Resource.Error("Conversion Error"))
+            }
+        }
+    }
+
+
+    private fun handlePopularMoviesResponse(response: Response<MovieResponse>): Resource<MovieResponse> {
+        if (response.isSuccessful) {
+            response.body()?.let {
+                if (popularMoviesResponse == null) {
+                    popularMoviesResponse = it
+                } else {
+                    val popularMovies = popularMoviesResponse?.movies
+                    val newMovies = it.movies
+                    popularMovies?.addAll(newMovies)
+                }
+
+                return Resource.Success(popularMoviesResponse ?: it)
+            }
+        }
+
+        return Resource.Error(response.message())
+
+
+    }
+
+    private suspend fun safeCallPopularMovies(language: String) {
+        popularMovies.postValue(Resource.Loading())
+        try {
+            if (hasInternetConnection()) {
+                val response = moviesRepository.getPopularMovies(language, page = popularMoviesPage)
+                popularMovies.postValue(handlePopularMoviesResponse(response))
+            } else {
+                popularMovies.postValue(Resource.Error("No Internet Connection"))
+            }
+        } catch (t: Throwable) {
+            when (t) {
+                is IOException -> popularMovies.postValue(Resource.Error("Network Failure"))
+                else -> popularMovies.postValue(Resource.Error("Conversion Error"))
+            }
+        }
     }
 
 

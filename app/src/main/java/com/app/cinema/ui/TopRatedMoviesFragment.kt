@@ -9,6 +9,7 @@ import android.widget.AbsListView
 import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.app.cinema.R
@@ -23,6 +24,8 @@ class TopRatedMoviesFragment : Fragment() {
 
     lateinit var viewModel: TopRatedMoviesFragmentViewModel
     lateinit var movieAdapter: MovieAdapter
+    lateinit var popularMovieAdapter: MovieAdapter
+    lateinit var upcomingMovieAdapter: MovieAdapter
 
     var isLoading = false
     var isLastPage = false
@@ -38,7 +41,46 @@ class TopRatedMoviesFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+
         setupAdapter()
+        setupPopularMoviesAdapter()
+        setupUpcomingMoviesAdapter()
+
+
+        movieAdapter.setOnItemClickListener {
+            val bundle = Bundle().apply {
+                putSerializable("movie", it)
+            }
+
+            findNavController().navigate(
+                R.id.action_topRatedMoviesFragment_to_detailsMovieFragment,
+                bundle
+            )
+        }
+
+        popularMovieAdapter.setOnItemClickListener {
+            val bundle = Bundle().apply {
+                putSerializable("movie", it)
+            }
+
+            findNavController().navigate(
+                R.id.action_topRatedMoviesFragment_to_detailsMovieFragment,
+                bundle
+            )
+        }
+
+        upcomingMovieAdapter.setOnItemClickListener {
+            val bundle = Bundle().apply {
+                putSerializable("movie", it)
+            }
+
+            findNavController().navigate(
+                R.id.action_topRatedMoviesFragment_to_detailsMovieFragment,
+                bundle
+            )
+        }
+
         val moviesRepository = MoviesRepository()
         val viewModelProviderFactory = activity?.application?.let {
             ViewModelProviderFactory(
@@ -58,11 +100,11 @@ class TopRatedMoviesFragment : Fragment() {
                     hideProgressBar()
                     response.data?.let { newResponse ->
                         movieAdapter.differ.submitList(newResponse.movies.toList())
-                        val totalPages = newResponse.totalResults / QUERY_PAGE_SIZE + 2
-                        isLastPage = viewModel.topRatedMoviesPage == totalPages
-                        if (isLastPage) {
-                            rv_top_rated_movies.setPadding(0, 0, 0, 0)
-                        }
+//                        val totalPages = newResponse.totalResults / QUERY_PAGE_SIZE + 2
+//                        isLastPage = viewModel.topRatedMoviesPage == totalPages
+//                        if (isLastPage) {
+//                            rv_top_rated_movies.setPadding(0, 0, 0, 0)
+//                        }
 
                     }
                 }
@@ -77,6 +119,50 @@ class TopRatedMoviesFragment : Fragment() {
                 }
             }
 
+        })
+
+        viewModel.popularMovies.observe(viewLifecycleOwner, Observer { response ->
+            when (response) {
+                is Resource.Success -> {
+                    hideProgressBar()
+                    response.data?.let { newResponse ->
+                        popularMovieAdapter.differ.submitList(newResponse.movies.toList())
+                    }
+                }
+
+                is Resource.Error -> {
+                    hideProgressBar()
+                    response.message?.let {
+                        Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
+                    }
+                }
+
+                is Resource.Loading -> {
+                    showProgressBar()
+                }
+            }
+        })
+
+        viewModel.upcomingMovies.observe(viewLifecycleOwner, Observer { response ->
+            when (response) {
+                is Resource.Success -> {
+                    hideProgressBar()
+                    response.data?.let { newResponse ->
+                        upcomingMovieAdapter.differ.submitList(newResponse.movies.toList())
+                    }
+                }
+
+                is Resource.Error -> {
+                    hideProgressBar()
+                    response.message?.let {
+                        Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
+                    }
+                }
+
+                is Resource.Loading -> {
+                    showProgressBar()
+                }
+            }
         })
 
 
@@ -123,11 +209,25 @@ class TopRatedMoviesFragment : Fragment() {
         }
     }
 
+    private fun setupUpcomingMoviesAdapter() {
+        upcomingMovieAdapter = MovieAdapter()
+        rv_upcoming_movies.apply {
+            adapter = upcomingMovieAdapter
+        }
+    }
+
+    private fun setupPopularMoviesAdapter() {
+        popularMovieAdapter = MovieAdapter()
+        rv_top_popular_movies.apply {
+            adapter = popularMovieAdapter
+        }
+    }
+
     private fun setupAdapter() {
         movieAdapter = MovieAdapter()
         rv_top_rated_movies.apply {
             adapter = movieAdapter
-            addOnScrollListener(this@TopRatedMoviesFragment.scrollListener)
+            // addOnScrollListener(this@TopRatedMoviesFragment.scrollListener)
 
         }
     }

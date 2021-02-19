@@ -1,29 +1,131 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/black"
+    android:background="@drawable/gradient_background"
     android:orientation="vertical"
     tools:context=".ui.TopRatedMoviesFragment">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_top_rated_movies"
+
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        tools:listitem="@layout/item_movie" />
-
-    <ProgressBar
-        android:id="@+id/paginationProgressBar"
-        style="?attr/progressBarStyle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/rv_top_rated_movies"
-        android:layout_centerInParent="true"
-        android:background="@android:color/transparent"
-        android:visibility="invisible" />
+        android:layout_height="wrap_content">
 
 
-</RelativeLayout>
+        <TextView
+            android:id="@+id/txt_headerTopRated"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:fontFamily="@font/montserrat_bold"
+            android:text="@string/top_rated_movie"
+            android:textColor="#d1c7c7"
+            android:textSize="24sp" />
+
+        <TextView
+            android:id="@+id/tv_seeAll_topRated"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="24dp"
+            android:fontFamily="@font/montserrat"
+            android:text="@string/see_all"
+            android:textColor="#d1c7c7"
+            android:textSize="16sp" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_top_rated_movies"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/txt_headerTopRated"
+            android:orientation="horizontal"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:listitem="@layout/item_movie" />
+
+        <TextView
+            android:id="@+id/txt_headerTopPopular"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/rv_top_rated_movies"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:fontFamily="@font/montserrat_bold"
+            android:text="@string/top_popular"
+            android:textColor="#d1c7c7"
+            android:textSize="24sp" />
+
+        <TextView
+            android:id="@+id/tv_seeAll_topPopular"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/rv_top_rated_movies"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="24dp"
+            android:fontFamily="@font/montserrat"
+            android:text="@string/see_all"
+            android:textColor="#d1c7c7"
+            android:textSize="16sp" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_top_popular_movies"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/txt_headerTopPopular"
+            android:orientation="horizontal"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:listitem="@layout/item_movie" />
+
+
+        <TextView
+            android:id="@+id/txt_headerUpcoming"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/rv_top_popular_movies"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:fontFamily="@font/montserrat_bold"
+            android:text="Upcoming"
+            android:textColor="#d1c7c7"
+            android:textSize="24sp" />
+
+        <TextView
+            android:id="@+id/tv_seeAll_upcoming"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/rv_top_popular_movies"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="24dp"
+            android:fontFamily="@font/montserrat"
+            android:text="@string/see_all"
+            android:textColor="#d1c7c7"
+            android:textSize="16sp" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_upcoming_movies"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/txt_headerUpcoming"
+            android:orientation="horizontal"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:listitem="@layout/item_movie" />
+
+
+        <ProgressBar
+            android:id="@+id/paginationProgressBar"
+            style="?attr/progressBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:background="@android:color/transparent"
+            android:visibility="invisible" />
+
+
+    </RelativeLayout>
+
+</ScrollView>

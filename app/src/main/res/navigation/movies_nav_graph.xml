@@ -9,5 +9,18 @@
         android:id="@+id/topRatedMoviesFragment"
         android:name="com.app.cinema.ui.TopRatedMoviesFragment"
         android:label="fragment_top_rated_movies"
-        tools:layout="@layout/fragment_top_rated_movies" />
+        tools:layout="@layout/fragment_top_rated_movies" >
+        <action
+            android:id="@+id/action_topRatedMoviesFragment_to_detailsMovieFragment"
+            app:destination="@id/detailsMovieFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/detailsMovieFragment"
+        android:name="com.app.cinema.ui.DetailsMovieFragment"
+        android:label="fragment_details_movie"
+        tools:layout="@layout/fragment_details_movie" >
+        <argument
+            android:name="movie"
+            app:argType="com.app.cinema.models.Movie" />
+    </fragment>
 </navigation>

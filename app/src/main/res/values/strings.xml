@@ -4,4 +4,12 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="movie_title">Movie title</string>
     <string name="release_date">Release date</string>
+    <string name="top_rated_movie">Top Rated</string>
+    <string name="see_all"><u>See all</u></string>
+    <string name="top_popular">Top Popular</string>
+    <string name="description">Description</string>
+    <string name="date">Date</string>
+    <string name="_5_0">5.0</string>
+    <string name="similar_movies">Похожие фильмы</string>
+
 </resources>
